@@ -1,0 +1,115 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <style>
+      table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 10px;
+      }
+    </style>
+    <script type="text/javascript" src="qrcode.min.js"></script>
+    <script>
+
+      var url = window.location.href;
+      if(url.indexOf`?` < 0)
+      {
+        url += '?step=1';
+      }
+
+      if(url != window.location.href) window.location.href = url
+
+      var params = {}
+      url.split`?`[1].split`&`.map(x=>x.split`=`).map(x=>params[x[0]] = x[1])
+
+      if(!params.step) window.location.href = url.split`?`[0]
+    </script>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <td id="details1"></td>
+        <td id="details2"></td>
+        <td id="details3"></td>
+      </tr>
+      <tr>
+        <td align="center"><div id="qrcode1" style="width:100px; height:100px;"></div></td>
+        <td align="center"><div id="qrcode2" style="width:100px; height:100px;"></div></td>
+        <td align="center"><div id="qrcode3" style="width:100px; height:100px;"></div></td>
+      </tr>
+      <tr>
+        <td id="details4"></td>
+        <td id="details5"></td>
+        <td id="details6"></td>
+      </tr>
+      <tr>
+        <td align="center"><div id="qrcode4" style="width:100px; height:100px;"></div></td>
+        <td align="center"><div id="qrcode5" style="width:100px; height:100px;"></div></td>
+        <td align="center"><div id="qrcode6" style="width:100px; height:100px;"></div></td>
+      </tr>
+      <tr>
+        <td id="details7"></td>
+        <td id="details8"></td>
+        <td id="details9"></td>
+      </tr>
+      <tr>
+        <td align="center"><div id="qrcode7" style="width:100px; height:100px;"></div></td>
+        <td align="center"><div id="qrcode8" style="width:100px; height:100px;"></div></td>
+        <td align="center"><div id="qrcode9" style="width:100px; height:100px;"></div></td>
+      </tr>
+      <tr>
+        <td id="details10"></td>
+        <td id="details11"></td>
+        <td id="details12"></td>
+      </tr>
+      <tr>
+        <td align="center"><div id="qrcode10" style="width:100px; height:100px;"></div></td>
+        <td align="center"><div id="qrcode11" style="width:100px; height:100px;"></div></td>
+        <td align="center"><div id="qrcode12" style="width:100px; height:100px;"></div></td>
+      </tr>
+      <tr>
+        <td id="details13"></td>
+        <td id="details14"></td>
+        <td id="details15"></td>
+      </tr>
+      <tr>
+        <td align="center"><div id="qrcode13" style="width:100px; height:100px;"></div></td>
+        <td align="center"><div id="qrcode14" style="width:100px; height:100px;"></div></td>
+        <td align="center"><div id="qrcode15" style="width:100px; height:100px;"></div></td>
+      </tr>
+      <tr>
+        <td id="details16"></td>
+        <td id="details17"></td>
+        <td id="details18"></td>
+      </tr>
+      <tr>
+        <td align="center"><div id="qrcode16" style="width:100px; height:100px;"></div></td>
+        <td align="center"><div id="qrcode17" style="width:100px; height:100px;"></div></td>
+        <td align="center"><div id="qrcode18" style="width:100px; height:100px;"></div></td>
+      </tr>
+    </table>
+    <script type="text/javascript">
+      var offset = (params.step - 1)  * 18;
+      function setCell(id, start, end)
+      {
+        var details = document.getElementById(`details${id}`);
+        details.innerHTML = `Passage de l'&eacute;tape ${start} &agrave; l'&eacute;tape ${end}`;
+        details.onclick = swapFinal;
+
+        var qrcodeBlock = document.getElementById(`qrcode${id}`);
+        qrcodeBlock.innerHTML = "";
+        var qrcode = new QRCode(qrcodeBlock, {width : 100, height : 100, correctLevel : QRCode.CorrectLevel.M});
+        qrcode.makeCode(start + '->' + end);
+      }
+      for(var i=1; i<=18; i++) 
+      {
+        setCell(i, i+offset, i+offset+1);
+      }
+
+      function swapFinal() {
+        [a,start,end] = this.innerHTML.match(/Passage de l..tape (.*?) . l..tape (.*)$/);
+        var newEnd = end == 'finale' ? +start + 1 : 'finale';
+        setCell(this.id.substr(7), +start, newEnd);
+      }
+    </script>
+  </body>
+</html>
